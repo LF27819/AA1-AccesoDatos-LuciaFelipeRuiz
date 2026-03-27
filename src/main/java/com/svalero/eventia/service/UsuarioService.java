@@ -18,7 +18,7 @@ public class UsuarioService {
         return usuarioRepository.findAll();
     }
 
-    public Usuario findById(Long id) throws UsuarioNotFoundException {
+    public Usuario findById(long id) throws UsuarioNotFoundException {
         return usuarioRepository.findById(id)
                 .orElseThrow(UsuarioNotFoundException::new);
     }
@@ -27,14 +27,14 @@ public class UsuarioService {
         return usuarioRepository.save(usuario);
     }
 
-    public void delete(Long id) throws UsuarioNotFoundException {
+    public void delete(long id) throws UsuarioNotFoundException {
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(UsuarioNotFoundException::new);
 
         usuarioRepository.delete(usuario);
     }
 
-    public Usuario modify(Long id, Usuario nuevoUsuario) throws UsuarioNotFoundException {
+    public Usuario modify(long id, Usuario nuevoUsuario) throws UsuarioNotFoundException {
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(UsuarioNotFoundException::new);
 
