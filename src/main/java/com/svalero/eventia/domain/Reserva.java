@@ -19,19 +19,19 @@ public class Reserva {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @NotNull
+    @NotNull(message = "La fecha no puede estar vacía")
     @Column(name = "fecha_reserva")
     private LocalDateTime fechaReserva;
-    @Min(value = 0 )
+    @Min(value = 0, message = "La cantidad de entradas no puede ser negativa")
     @Column(name = "cantidad_entradas")
     private int cantidadEntradas;
-    @NotNull
-    @Min(value = 0 )
+    @NotNull(message = "El precio no puede estar vacío")
+    @Min(value = 0, message = "El valor no puede ser negativo" )
     @Column(name = "precio_total")
     private float precioTotal;
     @Column(name = "metodo_pago")
     private String metodoPago;
-    @NotNull
+    @NotNull(message = "El codigo no puede estar vacío")
     @Column(name= "codigo_reserva", unique = true)
     private String codigoReserva;
     @Column

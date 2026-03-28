@@ -2,11 +2,19 @@ package com.svalero.eventia.controller;
 
 import com.svalero.eventia.domain.Artista;
 import com.svalero.eventia.exception.ArtistaNotFoundException;
+import com.svalero.eventia.exception.ErrorResponse;
 import com.svalero.eventia.service.ArtistaService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class ArtistaController {
@@ -15,27 +23,60 @@ public class ArtistaController {
     private ArtistaService artistaService;
 
     @GetMapping("/artistas")
-    public List<Artista> getAllArtistas() {
-        return artistaService.findAll();
+    public ResponseEntity<List<Artista>> getAllArtistas() {
+        List<Artista> artistas = artistaService.findAll();
+        return ResponseEntity.ok(artistas);
     }
 
     @GetMapping("/artistas/{id}")
-    public Artista getArtista(@PathVariable Long id) throws ArtistaNotFoundException {
-        return artistaService.findById(id);
+    public ResponseEntity<Artista> getArtista(@PathVariable long id) throws ArtistaNotFoundException {
+        Artista artista = artistaService.findById(id);
+        return ResponseEntity.ok(artista);
     }
 
     @PostMapping("/artistas")
-    public Artista addArtista(@RequestBody Artista artista) {
-        return artistaService.add(artista);
+    public ResponseEntity<Artista> addArtista(@Valid  @RequestBody Artista artista) {
+        Artista nuevoArtista = artistaService.add(artista);
+        return new ResponseEntity<>(nuevoArtista, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/artistas/{id}")
-    public void deleteArtista(@PathVariable Long id) throws ArtistaNotFoundException {
+    public ResponseEntity<Void> deleteArtista(@PathVariable long id) throws ArtistaNotFoundException {
         artistaService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/artistas/{id}")
-    public Artista modifyArtista(@PathVariable Long id, @RequestBody Artista artista) throws ArtistaNotFoundException {
-        return artistaService.modify(id, artista);
+    public ResponseEntity<Artista> modifyArtista(@PathVariable long id, @Valid @RequestBody Artista artista) throws ArtistaNotFoundException {
+        Artista artistaModificado = artistaService.modify(id, artista);
+        return ResponseEntity.ok(artistaModificado);
+    }
+
+
+
+    @ExceptionHandler(ArtistaNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleException(ArtistaNotFoundException anfe) {
+        return new ResponseEntity<>(ErrorResponse.notFound(anfe.getMessage()), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleException(MethodArgumentNotValidException manve) {
+        Map<String, String> errors = new HashMap<>();
+        manve.getBindingResult().getAllErrors().forEach(error -> {
+            String fieldName = ((FieldError) error).getField();
+            String message = error.getDefaultMessage();
+            errors.put(fieldName, message);
+        });
+
+        ErrorResponse errorResponse = ErrorResponse.validationError(errors);
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> handleException(Exception e) {
+        return new ResponseEntity<>(
+                ErrorResponse.generalError(500, "internal-server-error", "Error interno del servidor"),
+                HttpStatus.INTERNAL_SERVER_ERROR
+        );
     }
 }

@@ -25,19 +25,19 @@ public class Evento {
     private String nombre;
     @Column
     private String descripcion;
-    @NotNull
+    @NotNull(message = "La fecha no puede estar vacía")
     @Column(name = "fecha_evento")
     private LocalDate fechaEvento;
-    @NotNull
+    @NotNull(message = "La hora no puede estar vacía")
     @Column(name = "hora_evento")
     private LocalTime horaEvento;
-    @PositiveOrZero
+    @PositiveOrZero (message = "El precio no puede ser negativo")
     @Column(name = "precio_entrada")
     private float precioEntrada;
-    @Positive
+    @Positive(message = "El aforo no puede ser negativo")
     @Column(name = "aforo_maximo")
     private int aforoMaximo;
-    @PositiveOrZero
+    @PositiveOrZero(message = "El numero de entradas no puede ser negativo")
     @Column(name = "entradas_disponibles")
     private int entradasDisponibles;
     @Column

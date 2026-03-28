@@ -19,10 +19,10 @@ public class Artista {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @NotBlank
+    @NotBlank(message = "El nombre no puede estar vacío")
     @Column(name = "nombre_artistico")
     private String nombreArtistico;
-    @NotBlank
+    @NotBlank(message = "El nombre no puede estar vacío")
     @Column(name = "nombre_real")
     private String nombreReal;
     @Column(name = "genero_musical")
@@ -31,10 +31,10 @@ public class Artista {
     private LocalDate fechaNacimiento;
     @Column
     private boolean activo;
-    @Min(value = 0 )
+    @Min(value = 0, message = "El valor no puede ser negativo" )
     @Column
     private float cache;
-    @Min(value = 0 )
+    @Min(value = 0, message = "El valor no puede ser negativo" )
     @Column(name = "eventos_realizados")
     private int eventosRealizados;
 }

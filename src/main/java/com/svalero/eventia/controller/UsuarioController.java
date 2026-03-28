@@ -1,12 +1,20 @@
 package com.svalero.eventia.controller;
 
 import com.svalero.eventia.domain.Usuario;
+import com.svalero.eventia.exception.ErrorResponse;
 import com.svalero.eventia.exception.UsuarioNotFoundException;
 import com.svalero.eventia.service.UsuarioService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class UsuarioController {
@@ -15,27 +23,60 @@ public class UsuarioController {
     private UsuarioService usuarioService;
 
     @GetMapping("/usuarios")
-    public List<Usuario> getAllUsuarios() {
-        return usuarioService.findAll();
+    public ResponseEntity<List<Usuario>> getAllUsuarios() {
+        List<Usuario> usuarios = usuarioService.findAll();
+        return ResponseEntity.ok(usuarios);
     }
 
     @GetMapping("/usuarios/{id}")
-    public Usuario getUsuario(@PathVariable Long id) throws UsuarioNotFoundException {
-        return usuarioService.findById(id);
+    public ResponseEntity<Usuario> getUsuario(@PathVariable long id) throws UsuarioNotFoundException {
+        Usuario usuario = usuarioService.findById(id);
+        return ResponseEntity.ok(usuario);
     }
 
     @PostMapping("/usuarios")
-    public Usuario addUsuario(@RequestBody Usuario usuario) {
-        return usuarioService.add(usuario);
+    public ResponseEntity<Usuario> addUsuario(@Valid @RequestBody Usuario usuario) {
+        Usuario nuevoUsuario = usuarioService.add(usuario);
+        return new ResponseEntity<>(nuevoUsuario, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/usuarios/{id}")
-    public void deleteUsuario(@PathVariable Long id) throws UsuarioNotFoundException {
+    public ResponseEntity<Void> deleteUsuario(@PathVariable long id) throws UsuarioNotFoundException {
         usuarioService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/usuarios/{id}")
-    public Usuario modifyUsuario(@PathVariable Long id, @RequestBody Usuario usuario) throws UsuarioNotFoundException {
-        return usuarioService.modify(id, usuario);
+    public ResponseEntity<Usuario> modifyUsuario(@PathVariable long id, @Valid @RequestBody Usuario usuario) throws UsuarioNotFoundException {
+        Usuario usuarioModificado = usuarioService.modify(id, usuario);
+        return ResponseEntity.ok(usuarioModificado);
+    }
+
+
+
+    @ExceptionHandler(UsuarioNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleException(UsuarioNotFoundException unfe) {
+        return new ResponseEntity<>(ErrorResponse.notFound(unfe.getMessage()), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleException(MethodArgumentNotValidException manve) {
+        Map<String, String> errors = new HashMap<>();
+        manve.getBindingResult().getAllErrors().forEach(error -> {
+            String fieldName = ((FieldError) error).getField();
+            String message = error.getDefaultMessage();
+            errors.put(fieldName, message);
+        });
+
+        ErrorResponse errorResponse = ErrorResponse.validationError(errors);
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> handleException(Exception e) {
+        return new ResponseEntity<>(
+                ErrorResponse.generalError(500, "internal-server-error", "Error interno del servidor"),
+                HttpStatus.INTERNAL_SERVER_ERROR
+        );
     }
 }

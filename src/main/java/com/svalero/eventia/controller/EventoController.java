@@ -1,12 +1,21 @@
 package com.svalero.eventia.controller;
 
 import com.svalero.eventia.domain.Evento;
+import com.svalero.eventia.exception.ErrorResponse;
 import com.svalero.eventia.exception.EventoNotFoundException;
+import com.svalero.eventia.exception.RecintoNotFoundException;
 import com.svalero.eventia.service.EventoService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class EventoController {
@@ -15,27 +24,60 @@ public class EventoController {
     private EventoService eventoService;
 
     @GetMapping("/eventos")
-    public List<Evento> getAllEventos() {
-        return eventoService.findAll();
+    public ResponseEntity<List<Evento>> getAllEventos() {
+        List<Evento> eventos = eventoService.findAll();
+        return ResponseEntity.ok(eventos);
     }
 
     @GetMapping("/eventos/{id}")
-    public Evento getEvento(@PathVariable Long id) throws EventoNotFoundException {
-        return eventoService.findById(id);
+    public ResponseEntity<Evento> getEvento(@PathVariable long id) throws EventoNotFoundException {
+        Evento evento = eventoService.findById(id);
+        return ResponseEntity.ok(evento);
     }
 
     @PostMapping("/eventos")
-    public Evento addEvento(@RequestBody Evento evento) {
-        return eventoService.add(evento);
+    public ResponseEntity<Evento> addEvento(@Valid @RequestBody Evento evento) {
+        Evento nuevoEvento = eventoService.add(evento);
+        return new ResponseEntity<>(nuevoEvento, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/eventos/{id}")
-    public void deleteEvento(@PathVariable Long id) throws EventoNotFoundException {
+    public ResponseEntity<Void> deleteEvento(@PathVariable long id) throws EventoNotFoundException {
         eventoService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/eventos/{id}")
-    public Evento modifyEvento(@PathVariable Long id, @RequestBody Evento evento) throws EventoNotFoundException {
-        return eventoService.modify(id, evento);
+    public ResponseEntity<Evento> modifyEvento(@PathVariable long id, @Valid @RequestBody Evento evento) throws EventoNotFoundException {
+        Evento eventoModificado = eventoService.modify(id, evento);
+        return ResponseEntity.ok(eventoModificado);
+    }
+
+
+
+    @ExceptionHandler(EventoNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleException(EventoNotFoundException enfe) {
+        return new ResponseEntity<>(ErrorResponse.notFound(enfe.getMessage()), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleException(MethodArgumentNotValidException manve) {
+        Map<String, String> errors = new HashMap<>();
+        manve.getBindingResult().getAllErrors().forEach(error -> {
+            String fieldName = ((FieldError) error).getField();
+            String message = error.getDefaultMessage();
+            errors.put(fieldName, message);
+        });
+
+        ErrorResponse errorResponse = ErrorResponse.validationError(errors);
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> handleException(Exception e) {
+        return new ResponseEntity<>(
+                ErrorResponse.generalError(500, "internal-server-error", "Error interno del servidor"),
+                HttpStatus.INTERNAL_SERVER_ERROR
+        );
     }
 }
