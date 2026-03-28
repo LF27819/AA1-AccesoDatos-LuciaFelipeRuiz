@@ -23,19 +23,19 @@ public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @NotNull
+    @NotNull(message = "El nombre es obligatorio")
     @Column
     private String nombre;
-    @NotNull
+    @NotNull(message = "El apellido es obligatorio")
     @Column
     private String apellidos;
-    @NotNull
-    @Email
+    @NotNull(message = "El email es obligatorio")
+    @Email(message = "El email no es válido")
     @Column(unique = true)
     private String email;
-    @NotNull
+    @NotNull(message = "La contraseña es obligatoria")
     @Column
-    @Size(min = 6, max = 20)
+    @Size(min = 6, max = 20, message = "El nombre debe tener entre 6 y 20 caracteres")
     private String password;
     @Column
     private String telefono;
@@ -47,7 +47,7 @@ public class Usuario {
     private int eventosAsistidos;
     @Column
     private String rol;
-    @Min(value = 0 )
+    @Min(value = 0, message = "El saldo no puede ser negativo" )
     @Column(name = "saldo_cuenta")
     private float saldoCuenta;
 }
