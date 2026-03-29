@@ -5,6 +5,11 @@ import com.svalero.eventia.exception.ReservaNotFoundException;
 import com.svalero.eventia.repository.ReservaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.util.ReflectionUtils;
+
+import java.lang.reflect.Field;
+import java.util.Map;
 
 import java.util.List;
 
@@ -13,6 +18,10 @@ public class ReservaService {
 
     @Autowired
     private ReservaRepository reservaRepository;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
 
     public List<Reserva> findAll() {
         return reservaRepository.findAll();
@@ -50,8 +59,27 @@ public class ReservaService {
         return reservaRepository.save(reserva);
     }
 
-
     public List<Reserva> findAll(String metodoPago, String codigoReserva, Boolean confirmada) {
         return reservaRepository.findByFilters(metodoPago, codigoReserva, confirmada);
+    }
+
+    public Reserva patch(long id, Map<String, Object> updates) throws ReservaNotFoundException {
+        Reserva reserva = reservaRepository.findById(id)
+                .orElseThrow(ReservaNotFoundException::new);
+
+        updates.forEach((key, value) -> {
+            if (key.equals("id")) {
+                return;
+            }
+
+            Field field = ReflectionUtils.findField(Reserva.class, key);
+            if (field != null) {
+                field.setAccessible(true);
+                Object convertedValue = objectMapper.convertValue(value, field.getType());
+                ReflectionUtils.setField(field, reserva, convertedValue);
+            }
+        });
+
+        return reservaRepository.save(reserva);
     }
 }

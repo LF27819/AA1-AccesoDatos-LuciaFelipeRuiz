@@ -56,6 +56,13 @@ public class RecintoController {
         return ResponseEntity.ok(recintoModificado);
     }
 
+    @PatchMapping("/recintos/{id}")
+    public ResponseEntity<Recinto> patchRecinto(@PathVariable long id,
+                                                @RequestBody Map<String, Object> updates) throws RecintoNotFoundException {
+        Recinto recintoActualizado = recintoService.patch(id, updates);
+        return ResponseEntity.ok(recintoActualizado);
+    }
+
 
 
     @ExceptionHandler(RecintoNotFoundException.class)

@@ -57,6 +57,13 @@ public class EventoController {
         return ResponseEntity.ok(eventoModificado);
     }
 
+    @PatchMapping("/eventos/{id}")
+    public ResponseEntity<Evento> patchEvento(@PathVariable long id,
+                                              @RequestBody Map<String, Object> updates) throws EventoNotFoundException {
+        Evento eventoActualizado = eventoService.patch(id, updates);
+        return ResponseEntity.ok(eventoActualizado);
+    }
+
 
 
     @ExceptionHandler(EventoNotFoundException.class)
