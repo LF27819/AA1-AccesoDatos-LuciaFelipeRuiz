@@ -39,6 +39,12 @@ public class ReservaController {
         return ResponseEntity.ok(reserva);
     }
 
+    @GetMapping("/reservas/confirmadas")
+    public ResponseEntity<List<Reserva>> getConfirmedReservas() {
+        List<Reserva> reservas = reservaService.findConfirmedReservas();
+        return ResponseEntity.ok(reservas);
+    }
+
     @PostMapping("/reservas")
     public ResponseEntity<Reserva> addReserva(@Valid  @RequestBody Reserva reserva) {
         Reserva nuevaReserva = reservaService.add(reserva);

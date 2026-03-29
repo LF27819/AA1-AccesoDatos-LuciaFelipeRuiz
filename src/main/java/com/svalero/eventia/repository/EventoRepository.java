@@ -22,4 +22,8 @@ public interface EventoRepository extends CrudRepository<Evento, Long> {
     List<Evento> findByFilters(@Param("nombre") String nombre,
                                     @Param("categoria") String categoria,
                                     @Param("cancelado") Boolean cancelado);
+
+
+    @Query("select e from Evento e where e.cancelado = true")
+    List<Evento> findCancelledEventos();
 }
