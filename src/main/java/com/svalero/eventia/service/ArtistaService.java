@@ -48,4 +48,8 @@ public class ArtistaService {
 
         return artistaRepository.save(artista);
     }
+
+    public List<Artista> findAll(String nombreArtistico, String generoMusical, Boolean activo) {
+        return artistaRepository.findByFilters(nombreArtistico, generoMusical, activo);
+    }
 }

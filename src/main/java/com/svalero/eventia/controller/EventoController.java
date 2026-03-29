@@ -24,8 +24,12 @@ public class EventoController {
     private EventoService eventoService;
 
     @GetMapping("/eventos")
-    public ResponseEntity<List<Evento>> getAllEventos() {
-        List<Evento> eventos = eventoService.findAll();
+    public ResponseEntity<List<Evento>> getAllEventos(
+            @RequestParam(required = false) String nombre,
+            @RequestParam(required = false) String categoria,
+            @RequestParam(required = false) Boolean cancelado) {
+
+        List<Evento> eventos = eventoService.findAll(nombre, categoria, cancelado);
         return ResponseEntity.ok(eventos);
     }
 

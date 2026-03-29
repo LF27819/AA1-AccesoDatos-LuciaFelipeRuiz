@@ -51,4 +51,9 @@ public class UsuarioService {
 
         return usuarioRepository.save(usuario);
     }
+
+    public List<Usuario> findAll(String nombre, String email, String rol) {
+        return usuarioRepository.findByFilters(nombre, email, rol);
+    }
+
 }

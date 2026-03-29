@@ -23,8 +23,12 @@ public class RecintoController {
     private RecintoService recintoService;
 
     @GetMapping("/recintos")
-    public ResponseEntity<List<Recinto>> getAllRecintos() {
-        List<Recinto> recintos = recintoService.findAll();
+    public ResponseEntity<List<Recinto>> getAllRecintos(
+            @RequestParam(required = false) String nombre,
+            @RequestParam(required = false) String ciudad,
+            @RequestParam(required = false) Boolean cubierto) {
+
+        List<Recinto> recintos = recintoService.findAll(nombre, ciudad, cubierto);
         return ResponseEntity.ok(recintos);
     }
 
