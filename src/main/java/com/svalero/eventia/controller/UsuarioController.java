@@ -23,8 +23,12 @@ public class UsuarioController {
     private UsuarioService usuarioService;
 
     @GetMapping("/usuarios")
-    public ResponseEntity<List<Usuario>> getAllUsuarios() {
-        List<Usuario> usuarios = usuarioService.findAll();
+    public ResponseEntity<List<Usuario>> getAllUsuarios(
+            @RequestParam(required = false) String nombre,
+            @RequestParam(required = false) String email,
+            @RequestParam(required = false) String rol) {
+
+        List<Usuario> usuarios = usuarioService.findAll(nombre, email, rol);
         return ResponseEntity.ok(usuarios);
     }
 

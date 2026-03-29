@@ -24,8 +24,12 @@ public class ReservaController {
     private ReservaService reservaService;
 
     @GetMapping("/reservas")
-    public ResponseEntity<List<Reserva>> getAllReservas() {
-        List<Reserva> reservas = reservaService.findAll();
+    public ResponseEntity<List<Reserva>> getAllReservas(
+            @RequestParam(required = false) String metodoPago,
+            @RequestParam(required = false) String codigoReserva,
+            @RequestParam(required = false) Boolean confirmada) {
+
+        List<Reserva> reservas = reservaService.findAll(metodoPago, codigoReserva, confirmada);
         return ResponseEntity.ok(reservas);
     }
 

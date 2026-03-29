@@ -49,4 +49,8 @@ public class RecintoService {
 
         return recintoRepository.save(recinto);
     }
+
+    public List<Recinto> findAll(String nombre, String ciudad, Boolean cubierto) {
+        return recintoRepository.findByFilters(nombre, ciudad, cubierto);
+    }
 }

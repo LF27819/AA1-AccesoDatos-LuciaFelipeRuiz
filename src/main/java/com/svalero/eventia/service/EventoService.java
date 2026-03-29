@@ -54,4 +54,9 @@ public class EventoService {
 
         return eventoRepository.save(evento);
     }
+
+
+    public List<Evento> findAll(String nombre, String categoria, Boolean cancelado) {
+        return eventoRepository.findByFilters(nombre, categoria, cancelado);
+    }
 }

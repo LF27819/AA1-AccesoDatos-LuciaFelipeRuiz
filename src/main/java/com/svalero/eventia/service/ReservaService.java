@@ -49,4 +49,9 @@ public class ReservaService {
 
         return reservaRepository.save(reserva);
     }
+
+
+    public List<Reserva> findAll(String metodoPago, String codigoReserva, Boolean confirmada) {
+        return reservaRepository.findByFilters(metodoPago, codigoReserva, confirmada);
+    }
 }

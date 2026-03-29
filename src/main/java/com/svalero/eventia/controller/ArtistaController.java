@@ -23,8 +23,12 @@ public class ArtistaController {
     private ArtistaService artistaService;
 
     @GetMapping("/artistas")
-    public ResponseEntity<List<Artista>> getAllArtistas() {
-        List<Artista> artistas = artistaService.findAll();
+    public ResponseEntity<List<Artista>> getAllArtistas(
+            @RequestParam(required = false) String nombreArtistico,
+            @RequestParam(required = false) String generoMusical,
+            @RequestParam(required = false) Boolean activo) {
+
+        List<Artista> artistas = artistaService.findAll(nombreArtistico, generoMusical,activo);
         return ResponseEntity.ok(artistas);
     }
 
