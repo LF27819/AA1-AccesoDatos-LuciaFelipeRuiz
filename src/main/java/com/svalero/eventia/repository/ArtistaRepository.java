@@ -13,6 +13,7 @@ public interface ArtistaRepository extends CrudRepository<Artista, Long> {
 
     List<Artista> findAll();
 
+
     @Query("select a from Artista a where " +
             "(:nombreArtistico is null or lower(a.nombreArtistico) like lower(concat('%', :nombreArtistico, '%'))) and " +
             "(:generoMusical is null or lower(a.generoMusical) like lower(concat('%', :generoMusical, '%'))) and " +
@@ -21,4 +22,8 @@ public interface ArtistaRepository extends CrudRepository<Artista, Long> {
     List<Artista> findByFilters(@Param("nombreArtistico") String nombreArtistico,
                                 @Param("generoMusical") String generoMusical,
                                 @Param("activo") Boolean activo);
+
+
+    @Query("select a from Artista a where a.activo = true")
+    List<Artista> findActiveArtistas();
 }

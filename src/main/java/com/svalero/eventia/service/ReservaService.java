@@ -82,4 +82,8 @@ public class ReservaService {
 
         return reservaRepository.save(reserva);
     }
+
+    public List<Reserva> findConfirmedReservas() {
+        return reservaRepository.findConfirmedReservas();
+    }
 }

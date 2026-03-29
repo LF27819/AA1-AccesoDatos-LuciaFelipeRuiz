@@ -22,4 +22,8 @@ public interface ReservaRepository extends CrudRepository<Reserva, Long> {
                                      @Param("codigoReserva") String codigoReserva,
                                      @Param("confirmada") Boolean confirmada);
 
+
+    @Query("select r from Reserva r where r.confirmada = true")
+    List<Reserva> findConfirmedReservas();
+
 }

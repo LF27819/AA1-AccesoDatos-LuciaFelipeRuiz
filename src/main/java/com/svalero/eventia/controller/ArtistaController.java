@@ -38,6 +38,12 @@ public class ArtistaController {
         return ResponseEntity.ok(artista);
     }
 
+    @GetMapping("/artistas/activos")
+    public ResponseEntity<List<Artista>> getActiveArtistas() {
+        List<Artista> artistas = artistaService.findActiveArtistas();
+        return ResponseEntity.ok(artistas);
+    }
+
     @PostMapping("/artistas")
     public ResponseEntity<Artista> addArtista(@Valid  @RequestBody Artista artista) {
         Artista nuevoArtista = artistaService.add(artista);

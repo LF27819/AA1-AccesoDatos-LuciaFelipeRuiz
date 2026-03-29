@@ -81,4 +81,8 @@ public class ArtistaService {
 
         return artistaRepository.save(artista);
     }
+
+    public List<Artista> findActiveArtistas() {
+        return artistaRepository.findActiveArtistas();
+    }
 }

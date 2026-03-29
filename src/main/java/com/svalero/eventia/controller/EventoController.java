@@ -39,6 +39,12 @@ public class EventoController {
         return ResponseEntity.ok(evento);
     }
 
+    @GetMapping("/eventos/cancelados")
+    public ResponseEntity<List<Evento>> getCancelledEventos() {
+        List<Evento> eventos = eventoService.findCancelledEventos();
+        return ResponseEntity.ok(eventos);
+    }
+
     @PostMapping("/eventos")
     public ResponseEntity<Evento> addEvento(@Valid @RequestBody Evento evento) {
         Evento nuevoEvento = eventoService.add(evento);
