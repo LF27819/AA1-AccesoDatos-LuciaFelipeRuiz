@@ -6,6 +6,11 @@ import com.svalero.eventia.repository.ArtistaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.util.ReflectionUtils;
+
+import java.lang.reflect.Field;
+import java.util.Map;
 import java.util.List;
 
 @Service
@@ -13,6 +18,10 @@ public class ArtistaService {
 
     @Autowired
     private ArtistaRepository artistaRepository;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
 
     public List<Artista> findAll() {
         return artistaRepository.findAll();
@@ -51,5 +60,25 @@ public class ArtistaService {
 
     public List<Artista> findAll(String nombreArtistico, String generoMusical, Boolean activo) {
         return artistaRepository.findByFilters(nombreArtistico, generoMusical, activo);
+    }
+
+    public Artista patch(long id, Map<String, Object> updates) throws ArtistaNotFoundException {
+        Artista artista = artistaRepository.findById(id)
+                .orElseThrow(ArtistaNotFoundException::new);
+
+        updates.forEach((key, value) -> {
+            if (key.equals("id")) {
+                return;
+            }
+
+            Field field = ReflectionUtils.findField(Artista.class, key);
+            if (field != null) {
+                field.setAccessible(true);
+                Object convertedValue = objectMapper.convertValue(value, field.getType());
+                ReflectionUtils.setField(field, artista, convertedValue);
+            }
+        });
+
+        return artistaRepository.save(artista);
     }
 }

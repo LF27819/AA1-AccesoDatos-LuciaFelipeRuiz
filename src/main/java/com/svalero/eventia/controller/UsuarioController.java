@@ -56,6 +56,13 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarioModificado);
     }
 
+    @PatchMapping("/usuarios/{id}")
+    public ResponseEntity<Usuario> patchUsuario(@PathVariable long id,
+                                                @RequestBody Map<String, Object> updates) throws UsuarioNotFoundException {
+        Usuario usuarioActualizado = usuarioService.patch(id, updates);
+        return ResponseEntity.ok(usuarioActualizado);
+    }
+
 
 
     @ExceptionHandler(UsuarioNotFoundException.class)

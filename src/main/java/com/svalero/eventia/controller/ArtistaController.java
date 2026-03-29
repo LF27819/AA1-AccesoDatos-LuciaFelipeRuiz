@@ -56,6 +56,13 @@ public class ArtistaController {
         return ResponseEntity.ok(artistaModificado);
     }
 
+    @PatchMapping("/artistas/{id}")
+    public ResponseEntity<Artista> patchArtista(@PathVariable long id,
+                                                @RequestBody Map<String, Object> updates) throws ArtistaNotFoundException {
+        Artista artistaActualizado = artistaService.patch(id, updates);
+        return ResponseEntity.ok(artistaActualizado);
+    }
+
 
 
     @ExceptionHandler(ArtistaNotFoundException.class)

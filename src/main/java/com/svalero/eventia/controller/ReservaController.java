@@ -57,6 +57,14 @@ public class ReservaController {
         return ResponseEntity.ok(reservaModificada);
     }
 
+    @PatchMapping("/reservas/{id}")
+    public ResponseEntity<Reserva> patchReserva(@PathVariable long id,
+                                                @RequestBody Map<String, Object> updates) throws ReservaNotFoundException {
+        Reserva reservaActualizada = reservaService.patch(id, updates);
+        return ResponseEntity.ok(reservaActualizada);
+    }
+
+
 
     @ExceptionHandler(ReservaNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleException(ReservaNotFoundException rnfe) {
