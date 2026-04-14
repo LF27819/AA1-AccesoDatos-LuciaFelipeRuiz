@@ -30,10 +30,8 @@ public class ArtistaServiceTests {
     @Mock
     private ObjectMapper objectMapper;
 
-    // -------------------------------------------------------
-    // findAll()
-    // -------------------------------------------------------
 
+    // findAll
     @Test
     public void testFindAll() {
         List<Artista> mockList = List.of(
@@ -51,10 +49,8 @@ public class ArtistaServiceTests {
         verify(artistaRepository, times(1)).findAll();
     }
 
-    // -------------------------------------------------------
-    // findAll(filters)
-    // -------------------------------------------------------
 
+    // findAll + filtros
     @Test
     public void testFindAllWithFilters() {
         List<Artista> mockList = List.of(
@@ -80,10 +76,7 @@ public class ArtistaServiceTests {
         assertEquals(0, result.size());
     }
 
-    // -------------------------------------------------------
     // findById
-    // -------------------------------------------------------
-
     @Test
     public void testFindById() throws ArtistaNotFoundException {
         Artista mockArtista = new Artista(1L, "Bad Bunny", "Benito Martínez", "reggaeton", LocalDate.of(1994, 3, 10), true, 50000f, 120);
@@ -104,10 +97,8 @@ public class ArtistaServiceTests {
         verify(artistaRepository, times(1)).findById(99L);
     }
 
-    // -------------------------------------------------------
-    // add
-    // -------------------------------------------------------
 
+    // add
     @Test
     public void testAdd() {
         Artista artista = new Artista(0L, "Karol G", "Carolina Giraldo", "reggaeton", LocalDate.of(1991, 2, 14), true, 45000f, 80);
@@ -122,10 +113,8 @@ public class ArtistaServiceTests {
         verify(artistaRepository, times(1)).save(artista);
     }
 
-    // -------------------------------------------------------
-    // delete
-    // -------------------------------------------------------
 
+    // delete
     @Test
     public void testDelete() throws ArtistaNotFoundException {
         Artista artista = new Artista(1L, "Bad Bunny", "Benito Martínez", "reggaeton", LocalDate.of(1994, 3, 10), true, 50000f, 120);
@@ -145,10 +134,8 @@ public class ArtistaServiceTests {
         verify(artistaRepository, never()).delete(any());
     }
 
-    // -------------------------------------------------------
-    // modify
-    // -------------------------------------------------------
 
+    // modify
     @Test
     public void testModify() throws ArtistaNotFoundException {
         Artista existing = new Artista(1L, "Bad Bunny", "Benito Martínez", "reggaeton", LocalDate.of(1994, 3, 10), true, 50000f, 120);
@@ -173,10 +160,8 @@ public class ArtistaServiceTests {
         verify(artistaRepository, never()).save(any());
     }
 
-    // -------------------------------------------------------
-    // findActiveArtistas
-    // -------------------------------------------------------
 
+    // Artistas activos
     @Test
     public void testFindActiveArtistas() {
         List<Artista> mockList = List.of(
@@ -192,10 +177,8 @@ public class ArtistaServiceTests {
         verify(artistaRepository, times(1)).findActiveArtistas();
     }
 
-    // -------------------------------------------------------
-    // patch
-    // -------------------------------------------------------
 
+    // patch
     @Test
     public void testPatch() throws ArtistaNotFoundException {
         Artista existing = new Artista(1L, "Bad Bunny", "Benito Martínez", "reggaeton", LocalDate.of(1994, 3, 10), true, 50000f, 120);

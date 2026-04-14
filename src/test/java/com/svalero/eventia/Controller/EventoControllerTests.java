@@ -38,10 +38,8 @@ public class EventoControllerTests {
                 LocalTime.of(20, 0), 30f, 5000, 4000, false, true, "musica", null, null, null);
     }
 
-    // -------------------------------------------------------
-    // GET /eventos → 200
-    // -------------------------------------------------------
 
+    // GET 200
     @Test
     public void testGetAllEventos200() throws Exception {
         when(eventoService.findAll(null, null, null)).thenReturn(List.of(buildEvento(1L), buildEvento(2L)));
@@ -51,10 +49,7 @@ public class EventoControllerTests {
                 .andExpect(jsonPath("$.length()").value(2));
     }
 
-    // -------------------------------------------------------
-    // GET /eventos/{id} → 200
-    // -------------------------------------------------------
-
+    // GET events/id 200
     @Test
     public void testGetEvento200() throws Exception {
         when(eventoService.findById(1L)).thenReturn(buildEvento(1L));
@@ -65,10 +60,7 @@ public class EventoControllerTests {
                 .andExpect(jsonPath("$.nombre").value("Festival Rock"));
     }
 
-    // -------------------------------------------------------
-    // GET /eventos/{id} → 404
-    // -------------------------------------------------------
-
+    // GET eventos/id 404
     @Test
     public void testGetEvento404() throws Exception {
         when(eventoService.findById(99L)).thenThrow(new EventoNotFoundException());
@@ -78,10 +70,7 @@ public class EventoControllerTests {
                 .andExpect(jsonPath("$.code").value(404));
     }
 
-    // -------------------------------------------------------
-    // POST /eventos → 201
-    // -------------------------------------------------------
-
+    // POST 201
     @Test
     public void testAddEvento201() throws Exception {
         Evento evento = buildEvento(0L);
@@ -94,10 +83,8 @@ public class EventoControllerTests {
                 .andExpect(jsonPath("$.id").value(1));
     }
 
-    // -------------------------------------------------------
-    // POST /eventos → 400 (fechaEvento y horaEvento son @NotNull)
-    // -------------------------------------------------------
 
+    // POST 400 (fechaEvento y horaEvento son @NotNull)
     @Test
     public void testAddEvento400() throws Exception {
         // Enviamos JSON sin fechaEvento ni horaEvento
@@ -110,10 +97,7 @@ public class EventoControllerTests {
                 .andExpect(jsonPath("$.code").value(400));
     }
 
-    // -------------------------------------------------------
-    // DELETE /eventos/{id} → 204
-    // -------------------------------------------------------
-
+    // DELETE eventos/id 204
     @Test
     public void testDeleteEvento204() throws Exception {
         doNothing().when(eventoService).delete(1L);
@@ -122,10 +106,7 @@ public class EventoControllerTests {
                 .andExpect(status().isNoContent());
     }
 
-    // -------------------------------------------------------
-    // DELETE /eventos/{id} → 404
-    // -------------------------------------------------------
-
+    // DELETE eventos/id 404
     @Test
     public void testDeleteEvento404() throws Exception {
         doThrow(new EventoNotFoundException()).when(eventoService).delete(99L);
@@ -135,10 +116,7 @@ public class EventoControllerTests {
                 .andExpect(jsonPath("$.code").value(404));
     }
 
-    // -------------------------------------------------------
-    // PUT /eventos/{id} → 200
-    // -------------------------------------------------------
-
+    // PUT eventos/id 200
     @Test
     public void testModifyEvento200() throws Exception {
         Evento evento = buildEvento(1L);
@@ -151,10 +129,7 @@ public class EventoControllerTests {
                 .andExpect(jsonPath("$.id").value(1));
     }
 
-    // -------------------------------------------------------
-    // PUT /eventos/{id} → 400
-    // -------------------------------------------------------
-
+    // PUT eventos/id 400
     @Test
     public void testModifyEvento400() throws Exception {
         String invalidJson = "{\"nombre\":\"Test\",\"precioEntrada\":-5,\"aforoMaximo\":0,\"entradasDisponibles\":0}";
@@ -166,10 +141,7 @@ public class EventoControllerTests {
                 .andExpect(jsonPath("$.code").value(400));
     }
 
-    // -------------------------------------------------------
-    // PUT /eventos/{id} → 404
-    // -------------------------------------------------------
-
+    // PUT eventos/id  404
     @Test
     public void testModifyEvento404() throws Exception {
         Evento evento = buildEvento(99L);
@@ -182,10 +154,7 @@ public class EventoControllerTests {
                 .andExpect(jsonPath("$.code").value(404));
     }
 
-    // -------------------------------------------------------
-    // PATCH /eventos/{id} → 200
-    // -------------------------------------------------------
-
+    // PATCH eventos/id 200
     @Test
     public void testPatchEvento200() throws Exception {
         when(eventoService.patch(eq(1L), any())).thenReturn(buildEvento(1L));
@@ -197,10 +166,7 @@ public class EventoControllerTests {
                 .andExpect(jsonPath("$.id").value(1));
     }
 
-    // -------------------------------------------------------
-    // PATCH /eventos/{id} → 404
-    // -------------------------------------------------------
-
+    // PATCH eventos/id 404
     @Test
     public void testPatchEvento404() throws Exception {
         when(eventoService.patch(eq(99L), any())).thenThrow(new EventoNotFoundException());

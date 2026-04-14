@@ -37,10 +37,7 @@ public class ArtistaControllerTests {
                 LocalDate.of(1994, 3, 10), true, 50000f, 120);
     }
 
-    // -------------------------------------------------------
-    // GET /artistas → 200
-    // -------------------------------------------------------
-
+    // GET 200
     @Test
     public void testGetAllArtistas200() throws Exception {
         List<Artista> mockList = List.of(buildArtista(1L), buildArtista(2L));
@@ -52,10 +49,7 @@ public class ArtistaControllerTests {
                 .andExpect(jsonPath("$[0].nombreArtistico").value("Bad Bunny"));
     }
 
-    // -------------------------------------------------------
-    // GET /artistas/{id} → 200
-    // -------------------------------------------------------
-
+    // GET artistas/id 200
     @Test
     public void testGetArtista200() throws Exception {
         when(artistaService.findById(1L)).thenReturn(buildArtista(1L));
@@ -66,10 +60,7 @@ public class ArtistaControllerTests {
                 .andExpect(jsonPath("$.nombreArtistico").value("Bad Bunny"));
     }
 
-    // -------------------------------------------------------
-    // GET /artistas/{id} → 404
-    // -------------------------------------------------------
-
+    // GET artistas/id 404
     @Test
     public void testGetArtista404() throws Exception {
         when(artistaService.findById(99L)).thenThrow(new ArtistaNotFoundException());
@@ -79,10 +70,7 @@ public class ArtistaControllerTests {
                 .andExpect(jsonPath("$.code").value(404));
     }
 
-    // -------------------------------------------------------
-    // POST /artistas → 201
-    // -------------------------------------------------------
-
+    // POST 201
     @Test
     public void testAddArtista201() throws Exception {
         Artista artista = buildArtista(0L);
@@ -96,10 +84,7 @@ public class ArtistaControllerTests {
                 .andExpect(jsonPath("$.id").value(1));
     }
 
-    // -------------------------------------------------------
-    // POST /artistas → 400 (validación: nombreArtistico vacío)
-    // -------------------------------------------------------
-
+    // POST 400 (validación: nombreArtistico vacío)
     @Test
     public void testAddArtista400() throws Exception {
         // nombreArtistico y nombreReal son @NotBlank, los dejamos vacíos
@@ -113,10 +98,7 @@ public class ArtistaControllerTests {
                 .andExpect(jsonPath("$.code").value(400));
     }
 
-    // -------------------------------------------------------
-    // DELETE /artistas/{id} → 204
-    // -------------------------------------------------------
-
+    // DELETE artistas/id 204
     @Test
     public void testDeleteArtista204() throws Exception {
         doNothing().when(artistaService).delete(1L);
@@ -125,10 +107,7 @@ public class ArtistaControllerTests {
                 .andExpect(status().isNoContent());
     }
 
-    // -------------------------------------------------------
-    // DELETE /artistas/{id} → 404
-    // -------------------------------------------------------
-
+    // DELETE artistas/id 404
     @Test
     public void testDeleteArtista404() throws Exception {
         doThrow(new ArtistaNotFoundException()).when(artistaService).delete(99L);
@@ -138,10 +117,7 @@ public class ArtistaControllerTests {
                 .andExpect(jsonPath("$.code").value(404));
     }
 
-    // -------------------------------------------------------
-    // PUT /artistas/{id} → 200
-    // -------------------------------------------------------
-
+    // PUT artistas/id 200
     @Test
     public void testModifyArtista200() throws Exception {
         Artista artista = buildArtista(1L);
@@ -154,10 +130,7 @@ public class ArtistaControllerTests {
                 .andExpect(jsonPath("$.id").value(1));
     }
 
-    // -------------------------------------------------------
-    // PUT /artistas/{id} → 400
-    // -------------------------------------------------------
-
+    // PUT artistas/id 400
     @Test
     public void testModifyArtista400() throws Exception {
         Artista invalid = new Artista(1L, "", "", "reggaeton",
@@ -170,10 +143,7 @@ public class ArtistaControllerTests {
                 .andExpect(jsonPath("$.code").value(400));
     }
 
-    // -------------------------------------------------------
-    // PUT /artistas/{id} → 404
-    // -------------------------------------------------------
-
+    // PUT artistas/id  404
     @Test
     public void testModifyArtista404() throws Exception {
         Artista artista = buildArtista(99L);
@@ -186,10 +156,7 @@ public class ArtistaControllerTests {
                 .andExpect(jsonPath("$.code").value(404));
     }
 
-    // -------------------------------------------------------
-    // PATCH /artistas/{id} → 200
-    // -------------------------------------------------------
-
+    // PATCH artistas/id 200
     @Test
     public void testPatchArtista200() throws Exception {
         when(artistaService.patch(eq(1L), any())).thenReturn(buildArtista(1L));
@@ -201,10 +168,7 @@ public class ArtistaControllerTests {
                 .andExpect(jsonPath("$.id").value(1));
     }
 
-    // -------------------------------------------------------
-    // PATCH /artistas/{id} → 404
-    // -------------------------------------------------------
-
+    // PATCH artistas/id 404
     @Test
     public void testPatchArtista404() throws Exception {
         when(artistaService.patch(eq(99L), any())).thenThrow(new ArtistaNotFoundException());

@@ -37,10 +37,7 @@ public class EventoServiceTests {
                 30f, 5000, 4000, cancelado, true, categoria, null, null, null);
     }
 
-    // -------------------------------------------------------
-    // findAll()
-    // -------------------------------------------------------
-
+    // findAll
     @Test
     public void testFindAll() {
         List<Evento> mockList = List.of(
@@ -57,10 +54,7 @@ public class EventoServiceTests {
         verify(eventoRepository, times(1)).findAll();
     }
 
-    // -------------------------------------------------------
-    // findAll(filters)
-    // -------------------------------------------------------
-
+    // findAll + filtros
     @Test
     public void testFindAllWithFilters() {
         List<Evento> mockList = List.of(buildEvento(1L, "Festival Rock", "musica", false));
@@ -82,10 +76,8 @@ public class EventoServiceTests {
         assertEquals(0, result.size());
     }
 
-    // -------------------------------------------------------
-    // findById
-    // -------------------------------------------------------
 
+    // findById
     @Test
     public void testFindById() throws EventoNotFoundException {
         Evento mock = buildEvento(1L, "Festival Rock", "musica", false);
@@ -105,10 +97,8 @@ public class EventoServiceTests {
         assertThrows(EventoNotFoundException.class, () -> eventoService.findById(99L));
     }
 
-    // -------------------------------------------------------
-    // add
-    // -------------------------------------------------------
 
+    // add
     @Test
     public void testAdd() {
         Evento nuevo = buildEvento(0L, "Concierto Jazz", "musica", false);
@@ -123,10 +113,8 @@ public class EventoServiceTests {
         verify(eventoRepository, times(1)).save(nuevo);
     }
 
-    // -------------------------------------------------------
-    // delete
-    // -------------------------------------------------------
 
+    // delete
     @Test
     public void testDelete() throws EventoNotFoundException {
         Evento mock = buildEvento(1L, "Festival Rock", "musica", false);
@@ -145,10 +133,8 @@ public class EventoServiceTests {
         verify(eventoRepository, never()).delete(any());
     }
 
-    // -------------------------------------------------------
-    // modify
-    // -------------------------------------------------------
 
+    // modify
     @Test
     public void testModify() throws EventoNotFoundException {
         Evento existing = buildEvento(1L, "Festival Rock", "musica", false);
@@ -171,10 +157,7 @@ public class EventoServiceTests {
         verify(eventoRepository, never()).save(any());
     }
 
-    // -------------------------------------------------------
-    // findCancelledEventos
-    // -------------------------------------------------------
-
+    // Eventos candcelados
     @Test
     public void testFindCancelledEventos() {
         List<Evento> mockList = List.of(buildEvento(1L, "Evento Cancelado", "musica", true));
@@ -188,10 +171,8 @@ public class EventoServiceTests {
         verify(eventoRepository, times(1)).findCancelledEventos();
     }
 
-    // -------------------------------------------------------
-    // patch
-    // -------------------------------------------------------
 
+    // patch
     @Test
     public void testPatch() throws EventoNotFoundException {
         Evento existing = buildEvento(1L, "Festival Rock", "musica", false);

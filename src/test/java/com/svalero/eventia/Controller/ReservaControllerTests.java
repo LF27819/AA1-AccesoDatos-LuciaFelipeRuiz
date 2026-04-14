@@ -37,10 +37,7 @@ public class ReservaControllerTests {
                 2, 60f, "tarjeta", "RES-00" + id, true, null, null);
     }
 
-    // -------------------------------------------------------
-    // GET /reservas → 200
-    // -------------------------------------------------------
-
+    // GET 200
     @Test
     public void testGetAllReservas200() throws Exception {
         when(reservaService.findAll(null, null, null)).thenReturn(List.of(buildReserva(1L), buildReserva(2L)));
@@ -50,10 +47,7 @@ public class ReservaControllerTests {
                 .andExpect(jsonPath("$.length()").value(2));
     }
 
-    // -------------------------------------------------------
-    // GET /reservas/{id} → 200
-    // -------------------------------------------------------
-
+    // GET reservas/id 200
     @Test
     public void testGetReserva200() throws Exception {
         when(reservaService.findById(1L)).thenReturn(buildReserva(1L));
@@ -64,10 +58,7 @@ public class ReservaControllerTests {
                 .andExpect(jsonPath("$.codigoReserva").value("RES-001"));
     }
 
-    // -------------------------------------------------------
-    // GET /reservas/{id} → 404
-    // -------------------------------------------------------
-
+    // GET reservas/id 404
     @Test
     public void testGetReserva404() throws Exception {
         when(reservaService.findById(99L)).thenThrow(new ReservaNotFoundException());
@@ -77,10 +68,7 @@ public class ReservaControllerTests {
                 .andExpect(jsonPath("$.code").value(404));
     }
 
-    // -------------------------------------------------------
-    // POST /reservas → 201
-    // -------------------------------------------------------
-
+    // POST 201
     @Test
     public void testAddReserva201() throws Exception {
         Reserva reserva = buildReserva(0L);
@@ -93,10 +81,7 @@ public class ReservaControllerTests {
                 .andExpect(jsonPath("$.id").value(1));
     }
 
-    // -------------------------------------------------------
-    // POST /reservas → 400 (fechaReserva, precioTotal, codigoReserva son @NotNull)
-    // -------------------------------------------------------
-
+    // POST 400 (fechaReserva, precioTotal, codigoReserva son @NotNull)
     @Test
     public void testAddReserva400() throws Exception {
         // Sin fechaReserva, precioTotal ni codigoReserva
@@ -109,10 +94,7 @@ public class ReservaControllerTests {
                 .andExpect(jsonPath("$.code").value(400));
     }
 
-    // -------------------------------------------------------
-    // DELETE /reservas/{id} → 204
-    // -------------------------------------------------------
-
+    // DELETE reservas/id 204
     @Test
     public void testDeleteReserva204() throws Exception {
         doNothing().when(reservaService).delete(1L);
@@ -121,10 +103,7 @@ public class ReservaControllerTests {
                 .andExpect(status().isNoContent());
     }
 
-    // -------------------------------------------------------
-    // DELETE /reservas/{id} → 404
-    // -------------------------------------------------------
-
+    // DELETE reservas/id 404
     @Test
     public void testDeleteReserva404() throws Exception {
         doThrow(new ReservaNotFoundException()).when(reservaService).delete(99L);
@@ -134,10 +113,7 @@ public class ReservaControllerTests {
                 .andExpect(jsonPath("$.code").value(404));
     }
 
-    // -------------------------------------------------------
-    // PUT /reservas/{id} → 200
-    // -------------------------------------------------------
-
+    // PUT reservas/id 200
     @Test
     public void testModifyReserva200() throws Exception {
         Reserva reserva = buildReserva(1L);
@@ -150,10 +126,7 @@ public class ReservaControllerTests {
                 .andExpect(jsonPath("$.id").value(1));
     }
 
-    // -------------------------------------------------------
-    // PUT /reservas/{id} → 400
-    // -------------------------------------------------------
-
+    // PUT reservas/id 400
     @Test
     public void testModifyReserva400() throws Exception {
         String invalidJson = "{\"cantidadEntradas\":-1,\"metodoPago\":\"tarjeta\",\"confirmada\":false}";
@@ -165,10 +138,7 @@ public class ReservaControllerTests {
                 .andExpect(jsonPath("$.code").value(400));
     }
 
-    // -------------------------------------------------------
-    // PUT /reservas/{id} → 404
-    // -------------------------------------------------------
-
+    // PUT reservas/id  404
     @Test
     public void testModifyReserva404() throws Exception {
         Reserva reserva = buildReserva(99L);
@@ -181,10 +151,7 @@ public class ReservaControllerTests {
                 .andExpect(jsonPath("$.code").value(404));
     }
 
-    // -------------------------------------------------------
-    // PATCH /reservas/{id} → 200
-    // -------------------------------------------------------
-
+    // PATCH reservas/id 200
     @Test
     public void testPatchReserva200() throws Exception {
         when(reservaService.patch(eq(1L), any())).thenReturn(buildReserva(1L));
@@ -196,10 +163,7 @@ public class ReservaControllerTests {
                 .andExpect(jsonPath("$.id").value(1));
     }
 
-    // -------------------------------------------------------
-    // PATCH /reservas/{id} → 404
-    // -------------------------------------------------------
-
+    // PATCH reservas/id 404
     @Test
     public void testPatchReserva404() throws Exception {
         when(reservaService.patch(eq(99L), any())).thenThrow(new ReservaNotFoundException());

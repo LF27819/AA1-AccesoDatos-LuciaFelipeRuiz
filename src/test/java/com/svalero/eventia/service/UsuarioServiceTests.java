@@ -35,10 +35,7 @@ public class UsuarioServiceTests {
                 true, LocalDate.of(1990, 1, 1), 5, rol, 100f);
     }
 
-    // -------------------------------------------------------
-    // findAll()
-    // -------------------------------------------------------
-
+    // findAll
     @Test
     public void testFindAll() {
         List<Usuario> mockList = List.of(
@@ -55,10 +52,7 @@ public class UsuarioServiceTests {
         verify(usuarioRepository, times(1)).findAll();
     }
 
-    // -------------------------------------------------------
-    // findAll(filters)
-    // -------------------------------------------------------
-
+    // findAll + filtros
     @Test
     public void testFindAllWithFilters() {
         List<Usuario> mockList = List.of(buildUsuario(1L, "Ana", "ana@email.com", "admin"));
@@ -81,10 +75,8 @@ public class UsuarioServiceTests {
         assertEquals(0, result.size());
     }
 
-    // -------------------------------------------------------
-    // findById
-    // -------------------------------------------------------
 
+    // findById
     @Test
     public void testFindById() throws UsuarioNotFoundException {
         Usuario mock = buildUsuario(1L, "Ana", "ana@email.com", "admin");
@@ -104,11 +96,9 @@ public class UsuarioServiceTests {
         assertThrows(UsuarioNotFoundException.class, () -> usuarioService.findById(99L));
     }
 
-    // -------------------------------------------------------
-    // add
-    // -------------------------------------------------------
 
-    @Test
+    // add
+        @Test
     public void testAdd() {
         Usuario nuevo = buildUsuario(0L, "Marta", "marta@email.com", "user");
         Usuario saved = buildUsuario(3L, "Marta", "marta@email.com", "user");
@@ -122,11 +112,9 @@ public class UsuarioServiceTests {
         verify(usuarioRepository, times(1)).save(nuevo);
     }
 
-    // -------------------------------------------------------
-    // delete
-    // -------------------------------------------------------
 
-    @Test
+    // delete
+        @Test
     public void testDelete() throws UsuarioNotFoundException {
         Usuario mock = buildUsuario(1L, "Ana", "ana@email.com", "admin");
         when(usuarioRepository.findById(1L)).thenReturn(Optional.of(mock));
@@ -144,11 +132,9 @@ public class UsuarioServiceTests {
         verify(usuarioRepository, never()).delete(any());
     }
 
-    // -------------------------------------------------------
-    // modify
-    // -------------------------------------------------------
 
-    @Test
+    // modify
+        @Test
     public void testModify() throws UsuarioNotFoundException {
         Usuario existing = buildUsuario(1L, "Ana", "ana@email.com", "user");
         Usuario updated = buildUsuario(1L, "Ana García", "ana@email.com", "admin");
@@ -171,10 +157,7 @@ public class UsuarioServiceTests {
         verify(usuarioRepository, never()).save(any());
     }
 
-    // -------------------------------------------------------
     // patch
-    // -------------------------------------------------------
-
     @Test
     public void testPatch() throws UsuarioNotFoundException {
         Usuario existing = buildUsuario(1L, "Ana", "ana@email.com", "user");

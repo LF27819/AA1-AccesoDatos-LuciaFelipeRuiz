@@ -37,10 +37,7 @@ public class UsuarioControllerTests {
                 "password123", "600000000", true, LocalDate.of(1990, 1, 1), 5, "user", 100f);
     }
 
-    // -------------------------------------------------------
-    // GET /usuarios → 200
-    // -------------------------------------------------------
-
+    // GET 200
     @Test
     public void testGetAllUsuarios200() throws Exception {
         when(usuarioService.findAll(null, null, null)).thenReturn(List.of(buildUsuario(1L), buildUsuario(2L)));
@@ -50,10 +47,7 @@ public class UsuarioControllerTests {
                 .andExpect(jsonPath("$.length()").value(2));
     }
 
-    // -------------------------------------------------------
-    // GET /usuarios/{id} → 200
-    // -------------------------------------------------------
-
+    // GET usuarios/id 200
     @Test
     public void testGetUsuario200() throws Exception {
         when(usuarioService.findById(1L)).thenReturn(buildUsuario(1L));
@@ -64,10 +58,7 @@ public class UsuarioControllerTests {
                 .andExpect(jsonPath("$.nombre").value("Ana"));
     }
 
-    // -------------------------------------------------------
-    // GET /usuarios/{id} → 404
-    // -------------------------------------------------------
-
+    // GET usuarios/id 404
     @Test
     public void testGetUsuario404() throws Exception {
         when(usuarioService.findById(99L)).thenThrow(new UsuarioNotFoundException());
@@ -77,10 +68,7 @@ public class UsuarioControllerTests {
                 .andExpect(jsonPath("$.code").value(404));
     }
 
-    // -------------------------------------------------------
-    // POST /usuarios → 201
-    // -------------------------------------------------------
-
+    // POST 201
     @Test
     public void testAddUsuario201() throws Exception {
         Usuario usuario = buildUsuario(0L);
@@ -93,10 +81,7 @@ public class UsuarioControllerTests {
                 .andExpect(jsonPath("$.id").value(1));
     }
 
-    // -------------------------------------------------------
-    // POST /usuarios → 400 (nombre, apellidos, email, password @NotNull; password @Size(min=6))
-    // -------------------------------------------------------
-
+    // POST 400 (nombre, apellidos, email, password @NotNull; password @Size(min=6))
     @Test
     public void testAddUsuario400MissingFields() throws Exception {
         // Sin nombre, apellidos, email ni password
@@ -135,10 +120,7 @@ public class UsuarioControllerTests {
                 .andExpect(jsonPath("$.code").value(400));
     }
 
-    // -------------------------------------------------------
-    // DELETE /usuarios/{id} → 204
-    // -------------------------------------------------------
-
+    // DELETE usuarios/id 204
     @Test
     public void testDeleteUsuario204() throws Exception {
         doNothing().when(usuarioService).delete(1L);
@@ -147,10 +129,7 @@ public class UsuarioControllerTests {
                 .andExpect(status().isNoContent());
     }
 
-    // -------------------------------------------------------
-    // DELETE /usuarios/{id} → 404
-    // -------------------------------------------------------
-
+    // DELETE usuarios/id 404
     @Test
     public void testDeleteUsuario404() throws Exception {
         doThrow(new UsuarioNotFoundException()).when(usuarioService).delete(99L);
@@ -160,10 +139,7 @@ public class UsuarioControllerTests {
                 .andExpect(jsonPath("$.code").value(404));
     }
 
-    // -------------------------------------------------------
-    // PUT /usuarios/{id} → 200
-    // -------------------------------------------------------
-
+    // PUT usuarios/id 200
     @Test
     public void testModifyUsuario200() throws Exception {
         Usuario usuario = buildUsuario(1L);
@@ -176,10 +152,7 @@ public class UsuarioControllerTests {
                 .andExpect(jsonPath("$.id").value(1));
     }
 
-    // -------------------------------------------------------
-    // PUT /usuarios/{id} → 400
-    // -------------------------------------------------------
-
+    // PUT usuarios/id 400
     @Test
     public void testModifyUsuario400() throws Exception {
         // saldoCuenta negativo y password demasiado corto
@@ -193,10 +166,7 @@ public class UsuarioControllerTests {
                 .andExpect(jsonPath("$.code").value(400));
     }
 
-    // -------------------------------------------------------
-    // PUT /usuarios/{id} → 404
-    // -------------------------------------------------------
-
+    // PUT usuarios/id  404
     @Test
     public void testModifyUsuario404() throws Exception {
         Usuario usuario = buildUsuario(99L);
@@ -209,10 +179,7 @@ public class UsuarioControllerTests {
                 .andExpect(jsonPath("$.code").value(404));
     }
 
-    // -------------------------------------------------------
-    // PATCH /usuarios/{id} → 200
-    // -------------------------------------------------------
-
+    // PATCH usuarios/id 200
     @Test
     public void testPatchUsuario200() throws Exception {
         when(usuarioService.patch(eq(1L), any())).thenReturn(buildUsuario(1L));
@@ -224,10 +191,7 @@ public class UsuarioControllerTests {
                 .andExpect(jsonPath("$.id").value(1));
     }
 
-    // -------------------------------------------------------
-    // PATCH /usuarios/{id} → 404
-    // -------------------------------------------------------
-
+    // PATCH usuarios/id 404
     @Test
     public void testPatchUsuario404() throws Exception {
         when(usuarioService.patch(eq(99L), any())).thenThrow(new UsuarioNotFoundException());

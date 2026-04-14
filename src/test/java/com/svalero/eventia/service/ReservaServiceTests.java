@@ -34,10 +34,8 @@ public class ReservaServiceTests {
         return new Reserva(id, LocalDateTime.of(2025, 5, 1, 10, 0), 2, 60f, metodoPago, codigo, confirmada, null, null);
     }
 
-    // -------------------------------------------------------
-    // findAll()
-    // -------------------------------------------------------
 
+    // findAll
     @Test
     public void testFindAll() {
         List<Reserva> mockList = List.of(
@@ -54,10 +52,8 @@ public class ReservaServiceTests {
         verify(reservaRepository, times(1)).findAll();
     }
 
-    // -------------------------------------------------------
-    // findAll(filters)
-    // -------------------------------------------------------
 
+    // findAll + filtros
     @Test
     public void testFindAllWithFilters() {
         List<Reserva> mockList = List.of(buildReserva(1L, "RES-001", "tarjeta", true));
@@ -80,10 +76,8 @@ public class ReservaServiceTests {
         assertEquals(0, result.size());
     }
 
-    // -------------------------------------------------------
-    // findById
-    // -------------------------------------------------------
 
+    // findById
     @Test
     public void testFindById() throws ReservaNotFoundException {
         Reserva mock = buildReserva(1L, "RES-001", "tarjeta", true);
@@ -103,11 +97,9 @@ public class ReservaServiceTests {
         assertThrows(ReservaNotFoundException.class, () -> reservaService.findById(99L));
     }
 
-    // -------------------------------------------------------
-    // add
-    // -------------------------------------------------------
 
-    @Test
+    // add
+       @Test
     public void testAdd() {
         Reserva nueva = buildReserva(0L, "RES-003", "paypal", false);
         Reserva saved = buildReserva(3L, "RES-003", "paypal", false);
@@ -121,11 +113,9 @@ public class ReservaServiceTests {
         verify(reservaRepository, times(1)).save(nueva);
     }
 
-    // -------------------------------------------------------
-    // delete
-    // -------------------------------------------------------
 
-    @Test
+    // delete
+        @Test
     public void testDelete() throws ReservaNotFoundException {
         Reserva mock = buildReserva(1L, "RES-001", "tarjeta", true);
         when(reservaRepository.findById(1L)).thenReturn(Optional.of(mock));
@@ -143,11 +133,9 @@ public class ReservaServiceTests {
         verify(reservaRepository, never()).delete(any());
     }
 
-    // -------------------------------------------------------
-    // modify
-    // -------------------------------------------------------
 
-    @Test
+    // modify
+        @Test
     public void testModify() throws ReservaNotFoundException {
         Reserva existing = buildReserva(1L, "RES-001", "tarjeta", false);
         Reserva updated = buildReserva(1L, "RES-001", "tarjeta", true);
@@ -169,11 +157,9 @@ public class ReservaServiceTests {
         verify(reservaRepository, never()).save(any());
     }
 
-    // -------------------------------------------------------
-    // findConfirmedReservas
-    // -------------------------------------------------------
 
-    @Test
+    // Reservas confirmadas
+      @Test
     public void testFindConfirmedReservas() {
         List<Reserva> mockList = List.of(buildReserva(1L, "RES-001", "tarjeta", true));
         when(reservaRepository.findConfirmedReservas()).thenReturn(mockList);
@@ -186,10 +172,8 @@ public class ReservaServiceTests {
         verify(reservaRepository, times(1)).findConfirmedReservas();
     }
 
-    // -------------------------------------------------------
-    // patch
-    // -------------------------------------------------------
 
+    // patch
     @Test
     public void testPatch() throws ReservaNotFoundException {
         Reserva existing = buildReserva(1L, "RES-001", "tarjeta", false);

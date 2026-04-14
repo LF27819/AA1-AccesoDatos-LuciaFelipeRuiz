@@ -37,10 +37,7 @@ public class RecintoControllerTests {
                 30000, false, 5000f, 50, LocalDate.of(1957, 1, 1));
     }
 
-    // -------------------------------------------------------
-    // GET /recintos → 200
-    // -------------------------------------------------------
-
+    // GET 200
     @Test
     public void testGetAllRecintos200() throws Exception {
         when(recintoService.findAll(null, null, null)).thenReturn(List.of(buildRecinto(1L), buildRecinto(2L)));
@@ -50,10 +47,7 @@ public class RecintoControllerTests {
                 .andExpect(jsonPath("$.length()").value(2));
     }
 
-    // -------------------------------------------------------
-    // GET /recintos/{id} → 200
-    // -------------------------------------------------------
-
+    // GET recintos/id 200
     @Test
     public void testGetRecinto200() throws Exception {
         when(recintoService.findById(1L)).thenReturn(buildRecinto(1L));
@@ -64,10 +58,7 @@ public class RecintoControllerTests {
                 .andExpect(jsonPath("$.nombre").value("Estadio Romareda"));
     }
 
-    // -------------------------------------------------------
-    // GET /recintos/{id} → 404
-    // -------------------------------------------------------
-
+    // GET recintos/id 404
     @Test
     public void testGetRecinto404() throws Exception {
         when(recintoService.findById(99L)).thenThrow(new RecintoNotFoundException());
@@ -77,10 +68,7 @@ public class RecintoControllerTests {
                 .andExpect(jsonPath("$.code").value(404));
     }
 
-    // -------------------------------------------------------
-    // POST /recintos → 201
-    // -------------------------------------------------------
-
+    // POST 201
     @Test
     public void testAddRecinto201() throws Exception {
         Recinto recinto = buildRecinto(0L);
@@ -93,10 +81,8 @@ public class RecintoControllerTests {
                 .andExpect(jsonPath("$.id").value(1));
     }
 
-    // -------------------------------------------------------
-    // POST /recintos → 400 (nombre, dirección, ciudad @NotNull)
-    // -------------------------------------------------------
 
+    // POST 400 (nombre, dirección, ciudad @NotNull)
     @Test
     public void testAddRecinto400() throws Exception {
         // Sin nombre, dirección ni ciudad (campos @NotNull)
@@ -109,10 +95,7 @@ public class RecintoControllerTests {
                 .andExpect(jsonPath("$.code").value(400));
     }
 
-    // -------------------------------------------------------
-    // DELETE /recintos/{id} → 204
-    // -------------------------------------------------------
-
+    // DELETE recintos/id 204
     @Test
     public void testDeleteRecinto204() throws Exception {
         doNothing().when(recintoService).delete(1L);
@@ -121,10 +104,7 @@ public class RecintoControllerTests {
                 .andExpect(status().isNoContent());
     }
 
-    // -------------------------------------------------------
-    // DELETE /recintos/{id} → 404
-    // -------------------------------------------------------
-
+    // DELETE recintos/id 404
     @Test
     public void testDeleteRecinto404() throws Exception {
         doThrow(new RecintoNotFoundException()).when(recintoService).delete(99L);
@@ -134,10 +114,7 @@ public class RecintoControllerTests {
                 .andExpect(jsonPath("$.code").value(404));
     }
 
-    // -------------------------------------------------------
-    // PUT /recintos/{id} → 200
-    // -------------------------------------------------------
-
+    // PUT recintos/id 200
     @Test
     public void testModifyRecinto200() throws Exception {
         Recinto recinto = buildRecinto(1L);
@@ -150,10 +127,7 @@ public class RecintoControllerTests {
                 .andExpect(jsonPath("$.id").value(1));
     }
 
-    // -------------------------------------------------------
-    // PUT /recintos/{id} → 400
-    // -------------------------------------------------------
-
+    // PUT recintos/id  400
     @Test
     public void testModifyRecinto400() throws Exception {
         String invalidJson = "{\"capacidad\":-1,\"precioAlquiler\":-100,\"eventosCelebrados\":-1}";
@@ -165,10 +139,7 @@ public class RecintoControllerTests {
                 .andExpect(jsonPath("$.code").value(400));
     }
 
-    // -------------------------------------------------------
-    // PUT /recintos/{id} → 404
-    // -------------------------------------------------------
-
+    // PUT recintos/id  404
     @Test
     public void testModifyRecinto404() throws Exception {
         Recinto recinto = buildRecinto(99L);
@@ -181,10 +152,7 @@ public class RecintoControllerTests {
                 .andExpect(jsonPath("$.code").value(404));
     }
 
-    // -------------------------------------------------------
-    // PATCH /recintos/{id} → 200
-    // -------------------------------------------------------
-
+    // PATCH recintos/id 200
     @Test
     public void testPatchRecinto200() throws Exception {
         when(recintoService.patch(eq(1L), any())).thenReturn(buildRecinto(1L));
@@ -196,10 +164,7 @@ public class RecintoControllerTests {
                 .andExpect(jsonPath("$.id").value(1));
     }
 
-    // -------------------------------------------------------
-    // PATCH /recintos/{id} → 404
-    // -------------------------------------------------------
-
+    // PATCH recintos/id 404
     @Test
     public void testPatchRecinto404() throws Exception {
         when(recintoService.patch(eq(99L), any())).thenThrow(new RecintoNotFoundException());

@@ -34,10 +34,8 @@ public class RecintoServiceTests {
         return new Recinto(id, nombre, "Calle Mayor 1", ciudad, 10000, cubierto, 5000f, 30, LocalDate.of(2000, 1, 1));
     }
 
-    // -------------------------------------------------------
-    // findAll()
-    // -------------------------------------------------------
 
+    // findAll
     @Test
     public void testFindAll() {
         List<Recinto> mockList = List.of(
@@ -54,10 +52,8 @@ public class RecintoServiceTests {
         verify(recintoRepository, times(1)).findAll();
     }
 
-    // -------------------------------------------------------
-    // findAll(filters)
-    // -------------------------------------------------------
 
+    // findAll + filtros
     @Test
     public void testFindAllWithFilters() {
         List<Recinto> mockList = List.of(buildRecinto(2L, "Estadio Romareda", "Zaragoza", false));
@@ -80,10 +76,8 @@ public class RecintoServiceTests {
         assertEquals(0, result.size());
     }
 
-    // -------------------------------------------------------
-    // findById
-    // -------------------------------------------------------
 
+    // findById
     @Test
     public void testFindById() throws RecintoNotFoundException {
         Recinto mock = buildRecinto(1L, "Palacio de Deportes", "Madrid", true);
@@ -103,10 +97,8 @@ public class RecintoServiceTests {
         assertThrows(RecintoNotFoundException.class, () -> recintoService.findById(99L));
     }
 
-    // -------------------------------------------------------
-    // add
-    // -------------------------------------------------------
 
+    // add
     @Test
     public void testAdd() {
         Recinto nuevo = buildRecinto(0L, "Auditorio", "Barcelona", true);
@@ -121,10 +113,8 @@ public class RecintoServiceTests {
         verify(recintoRepository, times(1)).save(nuevo);
     }
 
-    // -------------------------------------------------------
-    // delete
-    // -------------------------------------------------------
 
+    // delete
     @Test
     public void testDelete() throws RecintoNotFoundException {
         Recinto mock = buildRecinto(1L, "Palacio de Deportes", "Madrid", true);
@@ -143,10 +133,8 @@ public class RecintoServiceTests {
         verify(recintoRepository, never()).delete(any());
     }
 
-    // -------------------------------------------------------
-    // modify
-    // -------------------------------------------------------
 
+    // modify
     @Test
     public void testModify() throws RecintoNotFoundException {
         Recinto existing = buildRecinto(1L, "Palacio de Deportes", "Madrid", true);
@@ -169,10 +157,8 @@ public class RecintoServiceTests {
         verify(recintoRepository, never()).save(any());
     }
 
-    // -------------------------------------------------------
-    // patch
-    // -------------------------------------------------------
 
+    // patch
     @Test
     public void testPatch() throws RecintoNotFoundException {
         Recinto existing = buildRecinto(1L, "Palacio de Deportes", "Madrid", true);
